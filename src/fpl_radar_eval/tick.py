@@ -63,7 +63,7 @@ def snapshot_decision(
     window = snapshot_window(bootstrap, fixtures, now)
     if window is None:
         return None
-    missing = missing_snapshot_variants(int(window["event_id"]), snapshot_exists)
+    missing = variants_to_snapshot(int(window["event_id"]), bool(window["late"]), snapshot_exists)
     if not missing:
         return None
     return {**window, "missing_variants": missing}
@@ -71,6 +71,16 @@ def snapshot_decision(
 
 def missing_snapshot_variants(event_id: int, snapshot_exists) -> list[str]:
     return [slug for slug in tick_variant_slugs() if not snapshot_exists(event_id, slug)]
+
+
+def variants_to_snapshot(event_id: int, late: bool, snapshot_exists) -> list[str]:
+    """Missing tick files. After kickoff, do not add variants if any freeze already exists."""
+    missing = missing_snapshot_variants(event_id, snapshot_exists)
+    if not missing:
+        return []
+    if late and any(snapshot_exists(event_id, slug) for slug in tick_variant_slugs()):
+        return []
+    return missing
 
 
 def missing_score_jobs(
@@ -137,8 +147,9 @@ def run_tick(*, sync: bool = True, dry_run: bool = False, now: datetime | None =
 
     if window:
         event_id = int(window["event_id"])
-        for slug in missing_snapshot_variants(
+        for slug in variants_to_snapshot(
             event_id,
+            bool(window["late"]),
             lambda eid, variant: snapshot_path(eid, variant=variant).exists(),
         ):
             if dry_run:

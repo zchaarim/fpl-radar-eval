@@ -1,0 +1,12 @@
+{
+  "event_id": 7,
+  "taken_at": "2026-10-18T09:04:13.134547+00:00",
+  "players": 667,
+  "placeholder": false,
+  "late": true,
+  "late_reason": "Frozen after several GW7 fixtures had already finished; not a clean pre-match prediction.",
+  "deadline_time": null,
+  "first_kickoff": null,
+  "variant": "default",
+  "path": "data/snapshots/gw7.jsonl"
+}
