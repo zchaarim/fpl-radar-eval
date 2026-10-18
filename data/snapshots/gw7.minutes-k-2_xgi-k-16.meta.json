@@ -1,0 +1,25 @@
+{
+  "event_id": 7,
+  "taken_at": "2026-10-18T10:40:21.790180+00:00",
+  "players": 667,
+  "placeholder": false,
+  "late": false,
+  "deadline_time": null,
+  "first_kickoff": null,
+  "shrinkage": {
+    "minutes_k": 2.0,
+    "xgi_k": 16.0,
+    "position_xgi_k": 8.0,
+    "team_k": 10.0,
+    "finishing_k": 18.0,
+    "home_split_k": 10.0,
+    "defcon_k": 8.0,
+    "bonus_k": 8.0,
+    "saves_k": 8.0,
+    "yellow_k": 8.0,
+    "red_k": 30.0
+  },
+  "variant": "minutes-k-2_xgi-k-16",
+  "wrote": 667,
+  "path": "data/snapshots/gw7.minutes-k-2_xgi-k-16.jsonl"
+}
