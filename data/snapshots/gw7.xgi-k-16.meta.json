@@ -1,0 +1,24 @@
+{
+  "event_id": 7,
+  "taken_at": "2026-10-18T11:25:10.492137+00:00",
+  "players": 667,
+  "placeholder": false,
+  "late": true,
+  "deadline_time": "2026-10-17T10:00:00Z",
+  "first_kickoff": "2026-10-17T11:30:00+00:00",
+  "shrinkage": {
+    "minutes_k": 4.0,
+    "xgi_k": 16.0,
+    "position_xgi_k": 8.0,
+    "team_k": 10.0,
+    "finishing_k": 18.0,
+    "home_split_k": 10.0,
+    "defcon_k": 8.0,
+    "bonus_k": 8.0,
+    "saves_k": 8.0,
+    "yellow_k": 8.0,
+    "red_k": 30.0
+  },
+  "variant": "xgi-k-16",
+  "path": "data/snapshots/gw7.xgi-k-16.jsonl"
+}
