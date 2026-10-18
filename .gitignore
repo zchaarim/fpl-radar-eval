@@ -1,0 +1,17 @@
+.env
+.venv
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+*.egg-info/
+dist/
+build/
+.coverage
+htmlcov/
+
+# Reuse the backend cache via FPL_DATA_DIR; do not keep a second copy here.
+data/cache/
+data/understat/
+.deps/
