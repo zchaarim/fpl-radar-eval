@@ -121,4 +121,5 @@ def run_score(
     live = _live_by_player(client, event_id)
     report = score_snapshot(event_id, rows, live, table)
     report["snapshot"] = repo_relpath(path)
+    report["late"] = any(bool(row.get("late")) for row in rows)
     return report

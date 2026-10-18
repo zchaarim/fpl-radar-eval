@@ -6,6 +6,7 @@ from fpl_radar_eval.tick import (
     score_event_ids,
     snapshot_decision,
     tick_variant_slugs,
+    variants_to_snapshot,
 )
 
 NOW = datetime(2026, 10, 18, 12, 0, tzinfo=timezone.utc)
@@ -69,6 +70,17 @@ def test_skip_if_snapshot_exists_or_finished() -> None:
         )
         is None
     )
+
+
+def test_late_does_not_add_variants_if_any_snapshot_exists() -> None:
+    have = {"default"}
+    missing = variants_to_snapshot(7, True, lambda _eid, slug: slug in have)
+    assert missing == []
+
+
+def test_late_still_snapshots_if_nothing_exists() -> None:
+    missing = variants_to_snapshot(7, True, lambda _eid, _slug: False)
+    assert missing == list(tick_variant_slugs())
 
 
 def test_only_missing_variants_are_listed() -> None:

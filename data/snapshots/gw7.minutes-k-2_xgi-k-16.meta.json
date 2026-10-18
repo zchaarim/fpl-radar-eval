@@ -3,9 +3,12 @@
   "taken_at": "2026-10-18T10:40:21.790180+00:00",
   "players": 667,
   "placeholder": false,
-  "late": false,
+  "late": true,
+  "late_reason": "Frozen after several GW7 fixtures had already finished; not a clean pre-match prediction.",
   "deadline_time": null,
   "first_kickoff": null,
+  "variant": "minutes-k-2_xgi-k-16",
+  "path": "data/snapshots/gw7.minutes-k-2_xgi-k-16.jsonl",
   "shrinkage": {
     "minutes_k": 2.0,
     "xgi_k": 16.0,
@@ -18,8 +21,5 @@
     "saves_k": 8.0,
     "yellow_k": 8.0,
     "red_k": 30.0
-  },
-  "variant": "minutes-k-2_xgi-k-16",
-  "wrote": 667,
-  "path": "data/snapshots/gw7.minutes-k-2_xgi-k-16.jsonl"
+  }
 }
