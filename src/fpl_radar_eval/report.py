@@ -1,13 +1,13 @@
 from __future__ import annotations
 
+import hashlib
 import json
 import re
 from collections import defaultdict
-from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
-from fpl_radar_eval.io import REPORT_DIR, ROOT, SCORED_DIR, SNAPSHOT_DIR, read_jsonl, write_json
+from fpl_radar_eval.io import REPORT_DIR, ROOT, SCORED_DIR, SNAPSHOT_DIR, read_jsonl
 
 _SCORED_NAME = re.compile(r"^gw(\d+)(?:\.(.+))?$")
 _SNAP_META = re.compile(r"^gw(\d+)(?:\.(.+))?\.meta$")
@@ -22,6 +22,13 @@ def parse_scored_stem(stem: str) -> tuple[int, str] | None:
 
 def _load_json(path: Path) -> dict[str, Any]:
     return json.loads(path.read_text(encoding="utf-8"))
+
+
+def _rel(root: Path, path: Path) -> str:
+    try:
+        return path.resolve().relative_to(root.resolve()).as_posix()
+    except ValueError:
+        return path.name
 
 
 def load_scored(root: Path = ROOT) -> list[dict[str, Any]]:
@@ -49,7 +56,7 @@ def load_scored(root: Path = ROOT) -> list[dict[str, Any]]:
                 "by_position": payload.get("by_position") or {},
                 "ep_next_by_position": payload.get("ep_next_by_position") or {},
                 "by_component": payload.get("by_component") or {},
-                "path": str(path),
+                "path": _rel(root, path),
             }
         )
     return rows
@@ -75,7 +82,7 @@ def load_snapshot_metas(root: Path = ROOT) -> list[dict[str, Any]]:
                 "first_kickoff": payload.get("first_kickoff"),
                 "replaced": payload.get("replaced"),
                 "placeholder": bool(payload.get("placeholder")),
-                "path": str(path),
+                "path": _rel(root, path),
             }
         )
     return rows
@@ -135,7 +142,6 @@ def build_board(root: Path = ROOT) -> dict[str, Any]:
         latest_snap = max(default_metas, key=lambda row: int(row["event_id"]))
     latest_id = int(latest_snap["event_id"]) if latest_snap else None
     return {
-        "generated_at": datetime.now(timezone.utc).isoformat(),
         "scored": scored,
         "snapshot_metas": metas,
         "default_scores": default_scores,
@@ -165,8 +171,7 @@ def render_markdown(board: dict[str, Any]) -> str:
     lines = [
         "# FPL Radar eval report",
         "",
-        f"Generated `{board['generated_at']}` from `data/scored/` and `data/snapshots/`.",
-        "Tick regenerates this file. Prospective totals **exclude** `late: true` weeks.",
+        "Built from `data/scored/` and `data/snapshots/`. Prospective totals **exclude** `late: true` weeks.",
         "",
         "## Season (clean GWs only)",
         "",
@@ -317,21 +322,48 @@ def render_markdown(board: dict[str, Any]) -> str:
     return "\n".join(lines).rstrip() + "\n"
 
 
-def write_report(root: Path = ROOT) -> Path:
-    board = build_board(root)
+def source_fingerprint(root: Path = ROOT) -> str:
+    """Hash of snapshot + scored files only (not the report). Newlines normalized so Windows/GHA match."""
+    digest = hashlib.sha256()
+    scored_dir = root / "data" / "scored"
+    snap_dir = root / "data" / "snapshots"
+    paths: list[Path] = []
+    if snap_dir.is_dir():
+        paths.extend(p for p in snap_dir.iterdir() if p.is_file() and p.suffix in {".jsonl", ".json"})
+    if scored_dir.is_dir():
+        paths.extend(p for p in scored_dir.iterdir() if p.is_file() and p.suffix == ".json")
+    for path in sorted(paths, key=lambda item: _rel(root, item)):
+        rel = _rel(root, path)
+        payload = path.read_bytes().replace(b"\r\n", b"\n").replace(b"\r", b"\n")
+        digest.update(rel.encode("utf-8"))
+        digest.update(b"\0")
+        digest.update(payload)
+        digest.update(b"\0")
+    return digest.hexdigest()
+
+
+def write_report(root: Path = ROOT) -> tuple[Path, bool]:
     report_dir = root / "data" / "reports" if root != ROOT else REPORT_DIR
-    report_dir.mkdir(parents=True, exist_ok=True)
     markdown_path = report_dir / "eval.md"
+    summary_path = report_dir / "eval.summary.json"
+    digest = source_fingerprint(root)
+    if markdown_path.exists() and summary_path.exists():
+        try:
+            previous = json.loads(summary_path.read_text(encoding="utf-8"))
+        except json.JSONDecodeError:
+            previous = {}
+        if previous.get("source_hash") == digest:
+            return markdown_path, False
+    board = build_board(root)
+    report_dir.mkdir(parents=True, exist_ok=True)
     markdown_path.write_text(render_markdown(board), encoding="utf-8")
-    write_json(
-        report_dir / "eval.summary.json",
-        {
-            "generated_at": board["generated_at"],
-            "clean_gws": [row["event_id"] for row in board["clean_scores"]],
-            "late_gws": [row["event_id"] for row in board["late_scores"]],
-            "pooled_clean": board["pooled_clean"],
-            "pooled_clean_ep": board["pooled_clean_ep"],
-            "latest_snapshot": board.get("latest_snapshot"),
-        },
-    )
-    return markdown_path
+    summary = {
+        "source_hash": digest,
+        "clean_gws": [row["event_id"] for row in board["clean_scores"]],
+        "late_gws": [row["event_id"] for row in board["late_scores"]],
+        "pooled_clean": board["pooled_clean"],
+        "pooled_clean_ep": board["pooled_clean_ep"],
+        "latest_snapshot": board.get("latest_snapshot"),
+    }
+    summary_path.write_text(json.dumps(summary, indent=2, default=str) + "\n", encoding="utf-8")
+    return markdown_path, True

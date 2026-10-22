@@ -69,8 +69,8 @@ def cmd_tick(args: argparse.Namespace) -> int:
 
 
 def cmd_report(_args: argparse.Namespace) -> int:
-    path = write_report()
-    print(f"Wrote {path}")
+    path, wrote = write_report()
+    print(f"Wrote {path}" if wrote else f"Unchanged {path} (snapshot/score data matches last report)")
     return 0
 
 

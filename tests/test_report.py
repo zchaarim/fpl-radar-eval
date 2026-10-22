@@ -53,11 +53,23 @@ def test_write_report_excludes_late_from_season(tmp_path: Path) -> None:
         '{"player_id":1,"web_name":"Saka","position":"MID","predicted":5.0,"ep_next":1.2}\n',
         encoding="utf-8",
     )
-    path = write_report(tmp_path)
+    path, wrote = write_report(tmp_path)
+    assert wrote is True
     text = path.read_text(encoding="utf-8")
     board = build_board(tmp_path)
     assert board["pooled_clean"]["mae"] == 0.5
     assert board["pooled_clean"]["n"] == 10
     assert "late" in text
     assert "Saka" in text
+    assert "Generated `" not in text
     assert render_markdown(board).startswith("# FPL Radar eval report")
+    first_mtime = path.stat().st_mtime_ns
+    _, wrote_again = write_report(tmp_path)
+    assert wrote_again is False
+    assert path.stat().st_mtime_ns == first_mtime
+    (snaps / "gw8.jsonl").write_text(
+        '{"player_id":1,"web_name":"Saka","position":"MID","predicted":5.1,"ep_next":1.2}\n',
+        encoding="utf-8",
+    )
+    _, wrote_new = write_report(tmp_path)
+    assert wrote_new is True
