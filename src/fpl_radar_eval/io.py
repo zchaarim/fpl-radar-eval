@@ -1,9 +1,12 @@
 from __future__ import annotations
 
+import hashlib
 import json
 from collections.abc import Iterable, Iterator
 from pathlib import Path
 from typing import Any
+
+_FINGERPRINT_SKIP = frozenset({"taken_at", "late"})
 
 ROOT = Path(__file__).resolve().parents[2]
 SNAPSHOT_DIR = ROOT / "data" / "snapshots"
@@ -65,3 +68,32 @@ def read_jsonl(path: Path) -> Iterator[dict[str, Any]]:
 def write_json(path: Path, payload: dict[str, Any]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(payload, indent=2, default=str) + "\n", encoding="utf-8")
+
+
+def _fingerprint_value(value: Any) -> Any:
+    if isinstance(value, float):
+        return round(value, 6)
+    if isinstance(value, dict):
+        return {str(key): _fingerprint_value(item) for key, item in sorted(value.items(), key=lambda kv: str(kv[0]))}
+    if isinstance(value, list):
+        return [_fingerprint_value(item) for item in value]
+    return value
+
+
+def snapshot_fingerprint(rows: Iterable[dict[str, Any]]) -> str:
+    """Hash of predictions and FPL ep_* only — ignores taken_at / late so rebuilds can match."""
+    payload = []
+    for row in sorted(rows, key=lambda item: int(item.get("player_id") or 0)):
+        payload.append(
+            {
+                key: _fingerprint_value(value)
+                for key, value in sorted(row.items())
+                if key not in _FINGERPRINT_SKIP
+            }
+        )
+    blob = json.dumps(payload, sort_keys=True, separators=(",", ":"), default=str)
+    return hashlib.sha256(blob.encode("utf-8")).hexdigest()
+
+
+def snapshots_equivalent(existing: Iterable[dict[str, Any]], incoming: Iterable[dict[str, Any]]) -> bool:
+    return snapshot_fingerprint(existing) == snapshot_fingerprint(incoming)

@@ -8,7 +8,16 @@ from fpl_radar.fpl_rules import ShrinkageConfig, shrinkage_from_overrides
 from fpl_radar.ingest.sync import default_cache, load_model_context, sync_fpl, sync_understat
 
 from fpl_radar_eval.events import bonus_added, first_kickoff
-from fpl_radar_eval.io import repo_relpath, scored_path, snapshot_path, write_json, write_jsonl
+from fpl_radar_eval.io import (
+    read_jsonl,
+    repo_relpath,
+    scored_path,
+    snapshot_fingerprint,
+    snapshot_path,
+    snapshots_equivalent,
+    write_json,
+    write_jsonl,
+)
 from fpl_radar_eval.score import run_score
 from fpl_radar_eval.snapshot import build_snapshot_rows
 
@@ -60,7 +69,7 @@ def snapshot_decision(
     window = snapshot_window(bootstrap, fixtures, now)
     if window is None:
         return None
-    missing = variants_to_snapshot(int(window["event_id"]), bool(window["late"]), snapshot_exists)
+    missing = variants_to_build(int(window["event_id"]), bool(window["late"]), snapshot_exists)
     if not missing:
         return None
     return {**window, "missing_variants": missing}
@@ -78,6 +87,13 @@ def variants_to_snapshot(event_id: int, late: bool, snapshot_exists) -> list[str
     if late and any(snapshot_exists(event_id, slug) for slug in tick_variant_slugs()):
         return []
     return missing
+
+
+def variants_to_build(event_id: int, late: bool, snapshot_exists) -> list[str]:
+    """Slugs to generate: missing files, plus existing ones before kickoff (content compare)."""
+    if late:
+        return variants_to_snapshot(event_id, late, snapshot_exists)
+    return list(tick_variant_slugs())
 
 
 def missing_score_jobs(
@@ -144,13 +160,22 @@ def run_tick(*, sync: bool = True, dry_run: bool = False, now: datetime | None =
 
     if window:
         event_id = int(window["event_id"])
-        for slug in variants_to_snapshot(
-            event_id,
-            bool(window["late"]),
-            lambda eid, variant: snapshot_path(eid, variant=variant).exists(),
-        ):
+
+        def _exists(eid: int, variant: str) -> bool:
+            return snapshot_path(eid, variant=variant).exists()
+
+        for slug in variants_to_build(event_id, bool(window["late"]), _exists):
+            path = snapshot_path(event_id, variant=slug)
+            already = path.exists()
             if dry_run:
-                actions.append({"op": "snapshot", "dry_run": True, "variant": slug, **window})
+                actions.append(
+                    {
+                        "op": "refresh" if already else "snapshot",
+                        "dry_run": True,
+                        "variant": slug,
+                        **window,
+                    }
+                )
                 continue
             rows, meta = build_snapshot_rows(
                 event_id,
@@ -160,10 +185,35 @@ def run_tick(*, sync: bool = True, dry_run: bool = False, now: datetime | None =
                 first_kickoff=window.get("first_kickoff"),
                 shrinkage=by_slug[slug],
             )
-            path = snapshot_path(event_id, variant=slug)
+            if already and snapshots_equivalent(read_jsonl(path), rows):
+                actions.append(
+                    {
+                        "op": "unchanged",
+                        "variant": slug,
+                        "path": repo_relpath(path),
+                        **window,
+                    }
+                )
+                continue
             write_jsonl(path, rows)
-            write_json(path.with_suffix(".meta.json"), {**meta, **window, "path": repo_relpath(path)})
-            actions.append({"op": "snapshot", "path": repo_relpath(path), **meta, **window})
+            write_json(
+                path.with_suffix(".meta.json"),
+                {
+                    **meta,
+                    **window,
+                    "path": repo_relpath(path),
+                    "content_hash": snapshot_fingerprint(rows),
+                    "replaced": already,
+                },
+            )
+            actions.append(
+                {
+                    "op": "refresh" if already else "snapshot",
+                    "path": repo_relpath(path),
+                    **meta,
+                    **window,
+                }
+            )
 
     jobs = missing_score_jobs(
         ctx.bootstrap,

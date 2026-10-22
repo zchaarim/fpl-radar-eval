@@ -29,7 +29,7 @@ python -m fpl_radar_eval score [--event N] [--variant minutes-k-2]
 python -m fpl_radar_eval tick [--dry-run] [--no-sync]
 ```
 
-`tick` (and GitHub Actions) writes the production snapshot plus six one-knob variants (`minutes-k` 2/8, `xgi-k` 4/16, `team-k` 5/20). It **skips any file that already exists**. Manual `--minutes-k` etc. are only for extra experiments beyond that set.
+`tick` (and GitHub Actions) writes the production snapshot plus six one-knob variants (`minutes-k` 2/8, `xgi-k` 4/16, `team-k` 5/20). Before kickoff it refreshes a file only when the prediction payload changed. After kickoff it never overwrites. Manual `--minutes-k` etc. are only for extra experiments beyond that set.
 
 `snapshot` defaults to the next unfinished gameweek. `score` defaults to the latest finished gameweek and reads `data/snapshots/gw{N}.jsonl`. It prints MAE / bias for modelled points vs FPL live, by position and by component, and the same totals vs FPL `ep_next` stored on the snapshot.
 
@@ -46,7 +46,7 @@ Parameter sweeps and previous-season walk-forwards can live here later. Do not a
 
 `.github/workflows/eval.yml` is scheduled often, but GitHub routinely delays public cron by hours. Use **Actions → Eval tick → Run workflow** if you need a freeze now. Each run pulls FPL bootstrap + fixtures + `event-status` and:
 
-1. **Snapshot** the next **unfinished** GW as soon as it is known (typically `is_next`, before `deadline_time`): any of `gwN.jsonl` / `gwN.<variant>.jsonl` that are **missing**. Existing files are left alone (no refresh). After first kickoff, new files are `late: true`, and tick will not add extra variants when at least one freeze already exists.
+1. **Snapshot** the next **unfinished** GW as soon as it is known (typically `is_next`, before first kickoff). Missing `gwN.jsonl` / `gwN.<variant>.jsonl` are written. If a file already exists, tick rebuilds and **overwrites only when predictions or stored `ep_next` differ** (`taken_at` is ignored). After first kickoff, existing files are frozen; tick will not add extra variants when at least one freeze already exists.
 2. **Score** when that GW is `finished` and bonus is on `event-status`: any variant that **has a snapshot** and **does not** yet have `data/scored/gwN.json` (or `gwN.<variant>.json`).
 
 New jsonl/JSON are committed back to this repo. Enable **Actions** write on the default branch. Scheduled workflows pause if the repo is inactive for 60 days; a push or a manual run wakes them.
