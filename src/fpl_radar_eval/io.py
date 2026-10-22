@@ -11,6 +11,7 @@ _FINGERPRINT_SKIP = frozenset({"taken_at", "late"})
 ROOT = Path(__file__).resolve().parents[2]
 SNAPSHOT_DIR = ROOT / "data" / "snapshots"
 SCORED_DIR = ROOT / "data" / "scored"
+REPORT_DIR = ROOT / "data" / "reports"
 
 
 def repo_relpath(path: Path) -> str:

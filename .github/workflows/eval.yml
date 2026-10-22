@@ -34,14 +34,16 @@ jobs:
         env:
           FPL_DATA_DIR: ${{ github.workspace }}/.deps/fpl-radar-backend/data
         run: python -m fpl_radar_eval tick
-      - name: Commit snapshots and scores
+      - name: Eval report
+        run: python -m fpl_radar_eval report
+      - name: Commit snapshots, scores, and report
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/snapshots data/scored
+          git add data/snapshots data/scored data/reports
           if git diff --staged --quiet; then
             echo "No eval files to commit"
             exit 0
           fi
-          git commit -m "eval: snapshot or score from FPL calendar tick"
+          git commit -m "eval: snapshot, score, or report from FPL calendar tick"
           git push
