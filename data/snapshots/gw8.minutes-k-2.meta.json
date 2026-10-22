@@ -1,6 +1,6 @@
 {
   "event_id": 8,
-  "taken_at": "2026-10-22T10:40:14.957905+00:00",
+  "taken_at": "2026-10-22T17:35:47.462548+00:00",
   "players": 668,
   "placeholder": false,
   "late": false,
@@ -21,6 +21,6 @@
   },
   "variant": "minutes-k-2",
   "path": "data/snapshots/gw8.minutes-k-2.jsonl",
-  "content_hash": "51d9049022080ff9ae88b24ab582f5d6416ea35c826ed8920b8f1dd635e691f2",
-  "replaced": false
+  "content_hash": "8f40f11b5a373376ddc4c02363a6e5e262ef6e693aa5a95e2b4abc4277754e8d",
+  "replaced": true
 }

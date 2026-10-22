@@ -1,6 +1,6 @@
 {
   "event_id": 8,
-  "taken_at": "2026-10-22T10:40:20.724173+00:00",
+  "taken_at": "2026-10-22T17:35:55.806877+00:00",
   "players": 668,
   "placeholder": false,
   "late": false,
@@ -21,6 +21,6 @@
   },
   "variant": "team-k-5",
   "path": "data/snapshots/gw8.team-k-5.jsonl",
-  "content_hash": "ba19d46ea3d2383425437ef97a89fb77bddb9bbeef861c60ed0c4e3ef0ae9556",
-  "replaced": false
+  "content_hash": "420319c28b826eb9d25f00e9642614675e74b38ac5514833f8f3e3250a8e01b7",
+  "replaced": true
 }

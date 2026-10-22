@@ -1,5 +1,5 @@
 {
-  "source_hash": "99cb9a9b6b7a44737c72dc6145095451efa46f7b42365d3ffaada4f8a68565df",
+  "source_hash": "15819cddfd6217f139e8c66bb256fffb8e3d05c4767a8d1f5073a3c5aa61a303",
   "clean_gws": [],
   "late_gws": [
     7
@@ -19,10 +19,10 @@
     "variant": "default",
     "late": false,
     "players": 668,
-    "taken_at": "2026-10-22T10:40:13.540592+00:00",
+    "taken_at": "2026-10-22T17:35:45.389281+00:00",
     "deadline_time": "2026-10-23T17:30:00Z",
     "first_kickoff": "2026-10-23T19:00:00+00:00",
-    "replaced": false,
+    "replaced": true,
     "placeholder": false,
     "path": "data/snapshots/gw8.meta.json"
   }
