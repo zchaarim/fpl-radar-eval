@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-22T11:09:19.185383+00:00",
+  "source_hash": "e0b974afa77a94098c66458f2b2904278a26a22dbe2a5629464af6dfdf45533b",
   "clean_gws": [],
   "late_gws": [
     7
@@ -24,6 +24,6 @@
     "first_kickoff": "2026-10-23T19:00:00+00:00",
     "replaced": false,
     "placeholder": false,
-    "path": "/home/runner/work/fpl-radar-eval/fpl-radar-eval/data/snapshots/gw8.meta.json"
+    "path": "data/snapshots/gw8.meta.json"
   }
 }
