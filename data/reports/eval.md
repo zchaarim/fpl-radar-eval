@@ -1,6 +1,6 @@
 # FPL Radar eval report
 
-Generated `2026-10-22T11:05:32.275388+00:00` from `data/scored/` and `data/snapshots/`.
+Generated `2026-10-22T11:09:19.185383+00:00` from `data/scored/` and `data/snapshots/`.
 Tick regenerates this file. Prospective totals **exclude** `late: true` weeks.
 
 ## Season (clean GWs only)
