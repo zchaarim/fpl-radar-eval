@@ -8,6 +8,7 @@ from pathlib import Path
 from fpl_radar.fpl_rules import add_shrinkage_arguments, shrinkage_from_args
 
 from fpl_radar_eval.io import repo_relpath, scored_path, snapshot_path, write_json, write_jsonl
+from fpl_radar_eval.report import write_report
 from fpl_radar_eval.score import run_score
 from fpl_radar_eval.snapshot import build_snapshot_rows
 from fpl_radar_eval.tick import run_tick
@@ -67,6 +68,12 @@ def cmd_tick(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_report(_args: argparse.Namespace) -> int:
+    path = write_report()
+    print(f"Wrote {path}")
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog="fpl-radar-eval")
     sub = parser.add_subparsers(dest="command", required=True)
@@ -93,6 +100,9 @@ def build_parser() -> argparse.ArgumentParser:
     tick.add_argument("--no-sync", action="store_true", help="Use caches only")
     tick.add_argument("--dry-run", action="store_true", help="Print decisions without writing")
     tick.set_defaults(func=cmd_tick)
+
+    report = sub.add_parser("report", help="Rebuild data/reports/eval.md from snapshots and scores")
+    report.set_defaults(func=cmd_report)
     return parser
 
 
