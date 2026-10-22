@@ -7,7 +7,7 @@ from fpl_radar.clients.fpl import FplClient
 from fpl_radar.fpl_rules import ShrinkageConfig, shrinkage_from_overrides
 from fpl_radar.ingest.sync import default_cache, load_model_context, sync_fpl, sync_understat
 
-from fpl_radar_eval.events import bonus_added, first_kickoff, parse_utc
+from fpl_radar_eval.events import bonus_added, first_kickoff
 from fpl_radar_eval.io import repo_relpath, scored_path, snapshot_path, write_json, write_jsonl
 from fpl_radar_eval.score import run_score
 from fpl_radar_eval.snapshot import build_snapshot_rows
@@ -33,13 +33,10 @@ def snapshot_window(
     fixtures: list[dict[str, Any]],
     now: datetime,
 ) -> dict[str, Any] | None:
-    """Unfinished GW whose FPL deadline has passed (snapshot window)."""
+    """Next unfinished GW (usually ``is_next``). Open before deadline; ``late`` after kickoff."""
     now = now.astimezone(timezone.utc)
     for event in bootstrap.get("events") or []:
         if event.get("finished"):
-            continue
-        deadline = parse_utc(event.get("deadline_time"))
-        if deadline is None or now < deadline:
             continue
         event_id = int(event["id"])
         kickoff = first_kickoff(fixtures, event_id)

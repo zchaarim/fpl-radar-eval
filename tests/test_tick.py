@@ -16,16 +16,22 @@ def _boot(*events: dict) -> dict:
     return {"events": list(events)}
 
 
-def test_no_snapshot_before_deadline() -> None:
+def test_snapshot_before_deadline_for_next_unfinished_gw() -> None:
     boot = _boot(
+        {"id": 7, "finished": True, "deadline_time": "2026-10-17T10:00:00Z"},
         {
-            "id": 7,
+            "id": 8,
             "finished": False,
-            "deadline_time": "2026-10-18T18:00:00Z",
-        }
+            "is_next": True,
+            "deadline_time": "2026-10-23T17:30:00Z",
+        },
     )
-    fixtures = [{"event": 7, "kickoff_time": "2026-10-18T19:30:00Z"}]
-    assert snapshot_decision(boot, fixtures, NOW, snapshot_exists=lambda _e, _s: False) is None
+    fixtures = [{"event": 8, "kickoff_time": "2026-10-24T14:00:00Z"}]
+    decision = snapshot_decision(boot, fixtures, NOW, snapshot_exists=lambda _e, _s: False)
+    assert decision is not None
+    assert decision["event_id"] == 8
+    assert decision["late"] is False
+    assert "default" in decision["missing_variants"]
 
 
 def test_snapshot_after_deadline_before_kickoff() -> None:

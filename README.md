@@ -37,16 +37,16 @@ python -m fpl_radar_eval tick [--dry-run] [--no-sync]
 
 ## Layout
 
-- `data/snapshots/` — append-only jsonl, one row per player per GW. Safe to commit. GW7 was frozen after several fixtures had finished (`late: true`); keep it, but do not treat it as a clean pre-match prediction. The prospective series starts at the next deadline.
+- `data/snapshots/` — append-only jsonl, one row per player per GW. Safe to commit. GW7 was frozen after several fixtures had finished (`late: true`); keep it, but do not treat it as a clean pre-match prediction. The prospective series starts at the next pre-kickoff freeze.
 - `data/scored/` — summary JSON from `score`. Safe to commit.
 
 Parameter sweeps and previous-season walk-forwards can live here later. Do not add them to the backend.
 
 ## GitHub Actions
 
-`.github/workflows/eval.yml` runs about every 15 minutes (GitHub may delay scheduled jobs) and on **Actions → Eval tick → Run workflow**. It does **not** assume a Friday 11:00. Each run pulls FPL bootstrap + fixtures + `event-status` and:
+`.github/workflows/eval.yml` is scheduled often, but GitHub routinely delays public cron by hours. Use **Actions → Eval tick → Run workflow** if you need a freeze now. Each run pulls FPL bootstrap + fixtures + `event-status` and:
 
-1. **Snapshot** after `deadline_time` for an unfinished GW: any of `gwN.jsonl` / `gwN.<variant>.jsonl` that are **missing**. Existing files are left alone. If a fixture has already kicked off, new files are marked `late: true`, and tick will not add extra variants when at least one freeze already exists.
+1. **Snapshot** the next **unfinished** GW as soon as it is known (typically `is_next`, before `deadline_time`): any of `gwN.jsonl` / `gwN.<variant>.jsonl` that are **missing**. Existing files are left alone (no refresh). After first kickoff, new files are `late: true`, and tick will not add extra variants when at least one freeze already exists.
 2. **Score** when that GW is `finished` and bonus is on `event-status`: any variant that **has a snapshot** and **does not** yet have `data/scored/gwN.json` (or `gwN.<variant>.json`).
 
 New jsonl/JSON are committed back to this repo. Enable **Actions** write on the default branch. Scheduled workflows pause if the repo is inactive for 60 days; a push or a manual run wakes them.
