@@ -1,0 +1,26 @@
+{
+  "event_id": 8,
+  "taken_at": "2026-10-22T10:40:22.187186+00:00",
+  "players": 668,
+  "placeholder": false,
+  "late": false,
+  "deadline_time": "2026-10-23T17:30:00Z",
+  "first_kickoff": "2026-10-23T19:00:00+00:00",
+  "shrinkage": {
+    "minutes_k": 4.0,
+    "xgi_k": 8.0,
+    "position_xgi_k": 8.0,
+    "team_k": 20.0,
+    "finishing_k": 18.0,
+    "home_split_k": 10.0,
+    "defcon_k": 8.0,
+    "bonus_k": 8.0,
+    "saves_k": 8.0,
+    "yellow_k": 8.0,
+    "red_k": 30.0
+  },
+  "variant": "team-k-20",
+  "path": "data/snapshots/gw8.team-k-20.jsonl",
+  "content_hash": "6707e989c160f7fc886b3a7bfff8a9db8768a29fcc66fcee035832ceb9b90c22",
+  "replaced": false
+}
