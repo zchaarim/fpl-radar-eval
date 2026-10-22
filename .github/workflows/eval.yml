@@ -2,7 +2,7 @@ name: Eval tick
 
 on:
   schedule:
-    # GitHub can delay cron. Tick reads FPL deadline / kickoff / finished / bonus.
+    # GitHub delays public cron (often hours). Tick uses FPL next unfinished GW / kickoff / bonus.
     - cron: "7,22,37,52 * * * *"
   workflow_dispatch:
 
