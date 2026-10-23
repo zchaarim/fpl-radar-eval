@@ -1,6 +1,6 @@
 {
   "event_id": 8,
-  "taken_at": "2026-10-22T17:35:53.710792+00:00",
+  "taken_at": "2026-10-23T12:51:18.164262+00:00",
   "players": 668,
   "placeholder": false,
   "late": false,
@@ -21,6 +21,6 @@
   },
   "variant": "xgi-k-16",
   "path": "data/snapshots/gw8.xgi-k-16.jsonl",
-  "content_hash": "1f9ded54234fd53b8cd5f0377fe2ee6fb5d58a85d270b5d8f67b4dd8454895bf",
+  "content_hash": "1654d838790c3df3c3c032ef7f8d6ff2d923412fa92b0a160560cfbf2b03d1b2",
   "replaced": true
 }
