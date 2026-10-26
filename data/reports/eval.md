@@ -4,13 +4,19 @@ Built from `data/scored/` and `data/snapshots/`. Prospective totals **exclude** 
 
 ## Season (clean GWs only)
 
-No clean (`late: false`) scored gameweeks yet.
+| series | player-GWs | MAE | bias |
+| --- | --- | --- | --- |
+| model | 668 | 1.2421 | 0.0725 |
+| FPL ep_next | 668 | 1.3132 | 0.1168 |
+
+Pooled MAE is the n-weighted mean of per-GW MAEs (same as stacking every player-GW row).
 
 ## Per gameweek (default variant)
 
 | GW | flag | n | model MAE | model bias | ep_next MAE | ep_next bias |
 | --- | --- | --- | --- | --- | --- | --- |
 | 7 | late | 667 | 1.1397 | 0.0021 | 1.0091 | 0.2292 |
+| 8 | clean | 668 | 1.2421 | 0.0725 | 1.3132 | 0.1168 |
 
 Late scored GWs (kept in the table, dropped from season totals): 7.
 
@@ -28,27 +34,39 @@ Late scored GWs (kept in the table, dropped from season totals): 7.
 | xgi-k-16 | late | 1.1427 | 0.0033 | +0.0030 |
 | minutes-k-8 | late | 1.1453 | 0.0062 | +0.0056 |
 
+### GW8
+
+| variant | flag | MAE | bias | Δ MAE vs default |
+| --- | --- | --- | --- | --- |
+| minutes-k-2 | clean | 1.2398 | 0.0698 | -0.0023 |
+| xgi-k-16 | clean | 1.2413 | 0.0737 | -0.0008 |
+| team-k-5 | clean | 1.2415 | 0.0691 | -0.0006 |
+| default | clean | 1.2421 | 0.0725 | — |
+| team-k-20 | clean | 1.2427 | 0.0747 | +0.0006 |
+| xgi-k-4 | clean | 1.2434 | 0.0711 | +0.0013 |
+| minutes-k-8 | clean | 1.2467 | 0.0771 | +0.0046 |
+
 ## Latest scored components (default)
 
-GW7 (late).
+GW8 (clean).
 
 | component | MAE | bias |
 | --- | --- | --- |
-| minutes | 0.3649 | -0.0317 |
-| attack | 0.4651 | -0.0293 |
-| cs | 0.3045 | 0.0278 |
-| gc | 0.0873 | 0.0114 |
-| defcon | 0.1419 | -0.0084 |
-| bonus | 0.1237 | 0.0668 |
-| saves | 0.0185 | -0.0074 |
-| cards | 0.1261 | -0.0272 |
+| minutes | 0.4019 | -0.0146 |
+| attack | 0.4045 | -0.0979 |
+| cs | 0.3879 | 0.0825 |
+| gc | 0.0868 | 0.0184 |
+| defcon | 0.1774 | 0.031 |
+| bonus | 0.1173 | 0.0558 |
+| saves | 0.0202 | -0.0003 |
+| cards | 0.1052 | -0.0024 |
 
 | pos | n | model MAE | model bias | ep MAE | ep bias |
 | --- | --- | --- | --- | --- | --- |
-| GKP | 73 | 0.6008 | 0.0571 | 0.6726 | 0.2315 |
-| DEF | 217 | 1.2815 | -0.0343 | 1.2 | 0.2968 |
-| MID | 298 | 1.1821 | -0.0296 | 0.952 | 0.1426 |
-| FWD | 79 | 1.0879 | 0.1704 | 1.0114 | 0.3684 |
+| GKP | 73 | 0.9009 | 0.2618 | 0.8082 | 0.4384 |
+| DEF | 217 | 1.6082 | 0.1297 | 1.6014 | 0.3332 |
+| MID | 299 | 1.1 | 0.003 | 1.2682 | -0.0375 |
+| FWD | 79 | 1.0892 | 0.003 | 1.1582 | -0.1911 |
 
 ## Snapshots on disk
 
@@ -69,28 +87,35 @@ GW7 (late).
 | 8 | team-k-5 | ok | 668 | 2026-10-23T12:51:20.283435+00:00 | 2026-10-23T19:00:00+00:00 |
 | 8 | xgi-k-16 | ok | 668 | 2026-10-23T12:51:18.164262+00:00 | 2026-10-23T19:00:00+00:00 |
 | 8 | xgi-k-4 | ok | 668 | 2026-10-23T12:51:16.073751+00:00 | 2026-10-23T19:00:00+00:00 |
+| 9 | default | ok | 669 | 2026-10-26T17:18:08.049680+00:00 | 2026-10-31T12:30:00+00:00 |
+| 9 | minutes-k-2 | ok | 669 | 2026-10-26T17:18:09.968236+00:00 | 2026-10-31T12:30:00+00:00 |
+| 9 | minutes-k-8 | ok | 669 | 2026-10-26T17:18:11.844294+00:00 | 2026-10-31T12:30:00+00:00 |
+| 9 | team-k-20 | ok | 669 | 2026-10-26T17:18:19.483096+00:00 | 2026-10-31T12:30:00+00:00 |
+| 9 | team-k-5 | ok | 669 | 2026-10-26T17:18:17.579684+00:00 | 2026-10-31T12:30:00+00:00 |
+| 9 | xgi-k-16 | ok | 669 | 2026-10-26T17:18:15.665422+00:00 | 2026-10-31T12:30:00+00:00 |
+| 9 | xgi-k-4 | ok | 669 | 2026-10-26T17:18:13.764947+00:00 | 2026-10-31T12:30:00+00:00 |
 
-## Model vs FPL `ep_next` on latest snapshot (GW8)
+## Model vs FPL `ep_next` on latest snapshot (GW9)
 
 No live scores required. Gap = predicted − ep_next.
 
 | player | pos | xP | ep_next | gap |
 | --- | --- | --- | --- | --- |
-| Henderson | MID | 1.25 | 10.5 | -9.25 |
-| Doku | MID | 0.88 | 9.0 | -8.12 |
-| Neto | MID | 3.83 | 10.0 | -6.17 |
-| Evanilson | FWD | 3.52 | 9.5 | -5.98 |
-| De Cuyper | DEF | 4.56 | 10.5 | -5.94 |
-| Cherif | FWD | 0.89 | 6.5 | -5.61 |
-| Ayari | MID | 2.55 | 8.0 | -5.45 |
-| Vuskovic | DEF | 4.6 | 9.5 | -4.9 |
-| Ouattara | DEF | 1.71 | 6.5 | -4.79 |
-| Bruno G. | MID | 1.44 | 6.0 | -4.56 |
-| Rice | MID | 3.55 | 8.0 | -4.45 |
-| F.Kadıoğlu | DEF | 3.05 | 7.5 | -4.45 |
-| Boscagli | DEF | 3.06 | 7.5 | -4.44 |
-| Manzambi | MID | 1.64 | 6.0 | -4.36 |
-| B.Fernandes | MID | 5.32 | 1.0 | 4.32 |
+| Henderson | MID | 1.34 | 7.7 | -6.36 |
+| Doku | MID | 1.13 | 6.7 | -5.57 |
+| Konsa | DEF | 3.92 | 9.0 | -5.08 |
+| N.Jackson | FWD | 3.09 | 8.0 | -4.91 |
+| Evanilson | FWD | 3.5 | 8.3 | -4.8 |
+| Saka | MID | 4.23 | 0.0 | 4.23 |
+| De Cuyper | DEF | 3.16 | 7.3 | -4.14 |
+| Neto | MID | 3.68 | 7.7 | -4.02 |
+| Cherif | FWD | 1.03 | 5.0 | -3.97 |
+| Ayari | MID | 2.31 | 6.0 | -3.69 |
+| Gabriel | DEF | 5.37 | 9.0 | -3.63 |
+| Hato | DEF | 2.25 | 5.7 | -3.45 |
+| Vuskovic | DEF | 3.33 | 6.7 | -3.37 |
+| Ouattara | DEF | 1.7 | 5.0 | -3.3 |
+| B.Fernandes | MID | 3.97 | 0.7 | 3.27 |
 
 ## How to read this
 

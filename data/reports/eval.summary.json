@@ -1,29 +1,31 @@
 {
-  "source_hash": "5634190e2b3c19b1dedc20b22e761312e443ad12751d901d7ed097513b2dc29d",
-  "clean_gws": [],
+  "source_hash": "4131cf59e633ea4a0952c873fc1a5fc4fceaedc425a033574d5b7fb1f86e4b72",
+  "clean_gws": [
+    8
+  ],
   "late_gws": [
     7
   ],
   "pooled_clean": {
-    "n": 0,
-    "mae": 0.0,
-    "bias": 0.0
+    "n": 668,
+    "mae": 1.2421,
+    "bias": 0.0725
   },
   "pooled_clean_ep": {
-    "n": 0,
-    "mae": 0.0,
-    "bias": 0.0
+    "n": 668,
+    "mae": 1.3132,
+    "bias": 0.1168
   },
   "latest_snapshot": {
-    "event_id": 8,
+    "event_id": 9,
     "variant": "default",
     "late": false,
-    "players": 668,
-    "taken_at": "2026-10-23T12:51:09.788294+00:00",
-    "deadline_time": "2026-10-23T17:30:00Z",
-    "first_kickoff": "2026-10-23T19:00:00+00:00",
-    "replaced": true,
+    "players": 669,
+    "taken_at": "2026-10-26T17:18:08.049680+00:00",
+    "deadline_time": "2026-10-31T11:00:00Z",
+    "first_kickoff": "2026-10-31T12:30:00+00:00",
+    "replaced": false,
     "placeholder": false,
-    "path": "data/snapshots/gw8.meta.json"
+    "path": "data/snapshots/gw9.meta.json"
   }
 }

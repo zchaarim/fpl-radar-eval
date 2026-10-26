@@ -1,0 +1,102 @@
+{
+  "event_id": 8,
+  "players": 668,
+  "model_vs_actual": {
+    "n": 668,
+    "mae": 1.2467,
+    "bias": 0.0771
+  },
+  "ep_next_vs_actual": {
+    "n": 668,
+    "mae": 1.3132,
+    "bias": 0.1168
+  },
+  "by_position": {
+    "GKP": {
+      "n": 73,
+      "mae": 0.9089,
+      "bias": 0.2606
+    },
+    "DEF": {
+      "n": 217,
+      "mae": 1.6154,
+      "bias": 0.1308
+    },
+    "MID": {
+      "n": 299,
+      "mae": 1.1007,
+      "bias": 0.0095
+    },
+    "FWD": {
+      "n": 79,
+      "mae": 1.0982,
+      "bias": 0.0162
+    }
+  },
+  "ep_next_by_position": {
+    "GKP": {
+      "n": 73,
+      "mae": 0.8082,
+      "bias": 0.4384
+    },
+    "DEF": {
+      "n": 217,
+      "mae": 1.6014,
+      "bias": 0.3332
+    },
+    "MID": {
+      "n": 299,
+      "mae": 1.2682,
+      "bias": -0.0375
+    },
+    "FWD": {
+      "n": 79,
+      "mae": 1.1582,
+      "bias": -0.1911
+    }
+  },
+  "by_component": {
+    "minutes": {
+      "n": 668,
+      "mae": 0.4108,
+      "bias": -0.0142
+    },
+    "attack": {
+      "n": 668,
+      "mae": 0.404,
+      "bias": -0.0954
+    },
+    "cs": {
+      "n": 668,
+      "mae": 0.3885,
+      "bias": 0.083
+    },
+    "gc": {
+      "n": 668,
+      "mae": 0.0869,
+      "bias": 0.0182
+    },
+    "defcon": {
+      "n": 668,
+      "mae": 0.178,
+      "bias": 0.0316
+    },
+    "bonus": {
+      "n": 668,
+      "mae": 0.1168,
+      "bias": 0.0568
+    },
+    "saves": {
+      "n": 668,
+      "mae": 0.0204,
+      "bias": -0.0004
+    },
+    "cards": {
+      "n": 668,
+      "mae": 0.1053,
+      "bias": -0.0024
+    }
+  },
+  "snapshot": "data/snapshots/gw8.minutes-k-8.jsonl",
+  "late": false
+}
