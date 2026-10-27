@@ -1,6 +1,6 @@
 {
   "event_id": 9,
-  "taken_at": "2026-10-27T12:27:38.084468+00:00",
+  "taken_at": "2026-10-27T18:14:20.038252+00:00",
   "players": 669,
   "placeholder": false,
   "late": false,
@@ -21,6 +21,6 @@
   },
   "variant": "team-k-20",
   "path": "data/snapshots/gw9.team-k-20.jsonl",
-  "content_hash": "bbf9674d31af5adefd530528b49ad0311cdf507bff3a9aaaa5a70906ddc16154",
+  "content_hash": "d71f1a8a1682f2585bdae1a356fbd2651eb0bd21f4b558d084286d2970042a3e",
   "replaced": true
 }
