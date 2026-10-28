@@ -1,5 +1,5 @@
 {
-  "source_hash": "a6ececdc56f23ae9ff0a935c980d507e06c3c54e634bb29a9dee18980d547dbe",
+  "source_hash": "f3e5f0b68dec719d0022560fc84eff8b68e6117c7f33abc0a71707bb92c912ca",
   "clean_gws": [
     8
   ],
@@ -21,7 +21,7 @@
     "variant": "default",
     "late": false,
     "players": 669,
-    "taken_at": "2026-10-28T01:39:12.679998+00:00",
+    "taken_at": "2026-10-28T23:40:03.569080+00:00",
     "deadline_time": "2026-10-31T11:00:00Z",
     "first_kickoff": "2026-10-31T12:30:00+00:00",
     "replaced": true,
