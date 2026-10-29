@@ -1,6 +1,6 @@
 {
   "event_id": 9,
-  "taken_at": "2026-10-29T09:50:13.759639+00:00",
+  "taken_at": "2026-10-29T16:28:05.464331+00:00",
   "players": 669,
   "placeholder": false,
   "late": false,
@@ -21,6 +21,6 @@
   },
   "variant": "xgi-k-4",
   "path": "data/snapshots/gw9.xgi-k-4.jsonl",
-  "content_hash": "4f1e0822f2fcc036b0781c1c072f807cfaafad1ca54f52d3a0c90a041ce98509",
+  "content_hash": "32c041641cbe79291b2ea92aedfdd620b2bdcb29280e6d67fae8e4166e059b2c",
   "replaced": true
 }
