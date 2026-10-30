@@ -1,6 +1,6 @@
 {
   "event_id": 9,
-  "taken_at": "2026-10-30T01:20:25.590849+00:00",
+  "taken_at": "2026-10-30T19:33:52.384814+00:00",
   "players": 669,
   "placeholder": false,
   "late": false,
@@ -21,6 +21,6 @@
   },
   "variant": "minutes-k-8",
   "path": "data/snapshots/gw9.minutes-k-8.jsonl",
-  "content_hash": "0ffce7d97e19cc97f2f1f82e5bb5ea4d9081f2be9b195063bafe9beebf1f82a7",
+  "content_hash": "0c419cb18cab6b153fd7fd8f6950e5ed95ae5b23726dd318caac4c4dc1caf57a",
   "replaced": true
 }
